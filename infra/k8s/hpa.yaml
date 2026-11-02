@@ -1,0 +1,42 @@
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: archon-v-gate-hpa
+  namespace: archon-v-prod
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: archon-v-gate
+  minReplicas: 3    # SLA 99.99%: nunca menos de 3 (uma por zona)
+  maxReplicas: 50   # Suporta até 25.000 commits/min sem intervenção humana
+  metrics:
+    # Escala por CPU (standard — gate é CPU-bound no regex scan)
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 60  # Escala ao atingir 60% — buffer de segurança
+    # Escala por memória (secondary signal)
+    - type: Resource
+      resource:
+        name: memory
+        target:
+          type: Utilization
+          averageUtilization: 70
+  behavior:
+    # Scale-up agressivo: segurança não pode sofrer com lentidão de escala
+    scaleUp:
+      stabilizationWindowSeconds: 30
+      policies:
+        - type: Pods
+          value: 4          # Adiciona até 4 pods por vez
+          periodSeconds: 60
+    # Scale-down conservador: evita flapping
+    scaleDown:
+      stabilizationWindowSeconds: 300  # Aguarda 5min antes de reduzir
+      policies:
+        - type: Pods
+          value: 1          # Remove 1 pod por vez
+          periodSeconds: 120

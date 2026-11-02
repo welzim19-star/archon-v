@@ -1,0 +1,152 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: archon-v-gate
+  namespace: archon-v-prod
+  labels:
+    app: archon-v-gate
+    version: "1.0.0"
+    tier: backend
+    security.archon-v.io/scan: "passed"
+spec:
+  # Mínimo 3 réplicas — uma por zona de disponibilidade (Regional GKE)
+  # Nunca vai a zero. Zero downtime deploy garantido.
+  replicas: 3
+  selector:
+    matchLabels:
+      app: archon-v-gate
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1          # Sobe 1 nova pod antes de derrubar a antiga
+      maxUnavailable: 0    # NUNCA derruba pod sem ter substituto (zero downtime)
+  template:
+    metadata:
+      labels:
+        app: archon-v-gate
+        version: "1.0.0"
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "8080"
+        prometheus.io/path: "/metrics"
+    spec:
+      # Distribuir pods por zonas (resiliência de zona)
+      topologySpreadConstraints:
+        - maxSkew: 1
+          topologyKey: topology.kubernetes.io/zone
+          whenUnsatisfiable: DoNotSchedule
+          labelSelector:
+            matchLabels:
+              app: archon-v-gate
+
+      # Workload Identity — sem chaves de serviço no cluster
+      serviceAccountName: archon-v-gate-sa
+
+      # Security Context de Pod (hardening)
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 65532      # uid nonroot do distroless
+        runAsGroup: 65532
+        fsGroup: 65532
+        seccompProfile:
+          type: RuntimeDefault
+
+      containers:
+        - name: archon-v-gate
+          image: gcr.io/archon-v-prod/archon-v-gate:1.0.0
+          imagePullPolicy: Always
+
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+
+          # Security Context de Container (hardening máximo)
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true   # Container não pode escrever no disco
+            capabilities:
+              drop: ["ALL"]               # Remove TODAS as Linux capabilities
+
+          # Variáveis de ambiente (segredos via Secret Manager, não literal)
+          env:
+            - name: ENV
+              value: "production"
+            - name: LOG_LEVEL
+              value: "INFO"
+            - name: GCP_PROJECT_ID
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace  # Derivado do namespace
+            - name: DB_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: archon-v-db-config
+                  key: host
+            - name: PORT
+              value: "8080"
+
+          # Resource limits (previne noisy neighbor)
+          resources:
+            requests:
+              cpu: "250m"
+              memory: "256Mi"
+            limits:
+              cpu: "1000m"
+              memory: "512Mi"
+
+          # Liveness probe — GKE reinicia se travar
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8080
+            initialDelaySeconds: 10
+            periodSeconds: 15
+            failureThreshold: 3
+
+          # Readiness probe — GKE tira do load balancer se não pronto
+          readinessProbe:
+            httpGet:
+              path: /ready
+              port: 8080
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            failureThreshold: 2
+
+          # Startup probe — dá tempo para inicializar (carrega KMS client)
+          startupProbe:
+            httpGet:
+              path: /health
+              port: 8080
+            failureThreshold: 12
+            periodSeconds: 5
+
+          # Volume para arquivos temporários (readOnlyRootFilesystem requer isso)
+          volumeMounts:
+            - name: tmp-dir
+              mountPath: /tmp
+
+      volumes:
+        - name: tmp-dir
+          emptyDir: {}
+
+      # Graceful shutdown — 30s para terminar requests em andamento
+      terminationGracePeriodSeconds: 30
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: archon-v-gate-svc
+  namespace: archon-v-prod
+  labels:
+    app: archon-v-gate
+spec:
+  type: ClusterIP
+  selector:
+    app: archon-v-gate
+  ports:
+    - name: http
+      port: 80
+      targetPort: 8080
+      protocol: TCP

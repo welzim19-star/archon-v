@@ -1,0 +1,61 @@
+# =============================================================================
+# Archon-V — Project Configuration (pytest + coverage + linting)
+# File: pyproject.toml
+# VALOR DE NEGÓCIO: Relatório de coverage é evidência para auditoria SOC 2.
+# =============================================================================
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+addopts = [
+    "--strict-markers",
+    "--tb=short",
+    "-v",
+    "--cov=core",
+    "--cov=api",
+    "--cov-report=term-missing",
+    "--cov-report=html:htmlcov",
+    "--cov-fail-under=54",   # Unit tests only. Sobe para 85% com integration tests (Fase 2 completa).
+]
+markers = [
+    "unit: Fast, isolated unit tests",
+    "integration: Tests that wire multiple components together",
+    "chaos: Tests that simulate failure scenarios (KMS down, DB missing)",
+]
+
+[tool.coverage.run]
+source = ["core", "api"]
+omit = [
+    "*/tests/*",
+    "*/__init__.py",
+    "*/conftest.py",
+]
+branch = true
+
+[tool.coverage.report]
+show_missing = true
+skip_covered = false
+precision = 2
+exclude_lines = [
+    "pragma: no cover",
+    "if TYPE_CHECKING:",
+    "raise NotImplementedError",
+    "if __name__ == .__main__.:",
+]
+
+[tool.bandit]
+# Bandit: security linter (CI pipeline)
+exclude_dirs = ["tests"]
+skips = ["B101"]   # assert allowed in tests
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+select = ["E", "F", "W", "I", "N", "S", "B", "A"]
+ignore = ["S101"]   # assert allowed
+
+[build-system]
+requires = ["setuptools>=69"]
+build-backend = "setuptools.backends.legacy:build"
