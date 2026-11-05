@@ -1,3 +1,7 @@
+<div align="right">
+  <strong>English</strong> | <a href="README.pt-BR.md">Português</a>
+</div>
+
 # Archon-V 🛡️⚡
 
 [![Language](https://img.shields.io/badge/Python-3.12%2B-blue.svg)](https://www.python.org/)
@@ -66,12 +70,12 @@ flowchart LR
 
 ## 📊 Test Suite & Code Quality Metrics
 
-| Métrica | Status / Valor | Padrão Corporativo |
+| Metric | Status / Value | Corporate Standard |
 | :--- | :---: | :---: |
-| **Cobertura de Testes (Coverage)** | **> 85% (Core & API)** | Audit Ready (SOC 2 Type II) |
-| **Segurança Estática (SAST)** | 0 Vulnerabilidades (Bandit) | OWASP API Security Top 10 |
-| **Complexidade Algorítmica** | **O(1) para Interceptação de Header** | High-Throughput SLA (< 1.8ms) |
-| **Linters & Formatters** | Ruff (Regras E, F, W, I, N, S, B, A) | Zero Technical Debt Policy |
+| **Test Coverage** | **> 85% (Core & API)** | Audit Ready (SOC 2 Type II) |
+| **Static Application Security Testing (SAST)** | 0 Vulnerabilities (Bandit) | OWASP API Security Top 10 |
+| **Algorithmic Complexity** | **O(1) for Header Interception** | High-Throughput SLA (< 1.8ms) |
+| **Linters & Formatters** | Ruff (Rules E, F, W, I, N, S, B, A) | Zero Technical Debt Policy |
 
 ---
 
