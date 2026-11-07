@@ -22,21 +22,21 @@
 O Archon-V atua como uma membrana de segurança imutável entre requisições externas não confiáveis (HTTP/gRPC) e os microsserviços de negócio internos.
 
 ```mermaid
-flowchart LR
-    Client["Cliente Não Confiável\n(Navegador / Mobile / B2B)"] 
+flowchart TD
+    Client["Cliente Externo<br/>(Web / Mobile / B2B)"] 
     
     subgraph ARCHON_CORE["Núcleo Interceptor Archon-V"]
-        WAF["Rate Limiting & Escudo contra Ameaças\n(Token Bucket O(1))"]
-        ABAC["Validador de Reivindicações ABAC\n(Matriz Imutável de Políticas)"]
-        KMS["Criptografia Envelope KMS\n(Escopos Isolados por Locatário)"]
-        Audit["Transmissor de Trilha de Auditoria SHA-256\n(Registro Imutável)"]
+        WAF["Rate Limiting & Blindagem<br/>(Token Bucket O(1))"]
+        ABAC["Validador ABAC<br/>(Políticas Imutáveis)"]
+        KMS["Criptografia Envelope KMS<br/>(Escopos por Locatário)"]
+        Audit["Transmissor de Auditoria<br/>(Cadeia SHA-256)"]
         
         WAF --> ABAC
         ABAC --> KMS
         KMS --> Audit
     end
     
-    Upstream["Serviços Bancários / Microsserviços Internos\n(Isolamento de Rede Total)"]
+    Upstream["Serviços Internos / Core Banking<br/>(Isolamento de Rede Total)"]
 
     Client --> WAF
     Audit --> Upstream
