@@ -6,6 +6,7 @@
 
 [![Language](https://img.shields.io/badge/Python-3.12%2B-blue.svg)](https://www.python.org/)
 [![Framework](https://img.shields.io/badge/Framework-FastAPI%20%2F%20Uvicorn-009688.svg)](https://fastapi.tiangolo.com/)
+[![CI](https://github.com/welzim19-star/archon-v/actions/workflows/ci.yml/badge.svg)](https://github.com/welzim19-star/archon-v/actions/workflows/ci.yml)
 [![Tests](https://img.shields.io/badge/Testing-Pytest%20%2B%20Coverage-success.svg)](tests/)
 [![Security](https://img.shields.io/badge/SAST-Bandit%20Passing-brightgreen.svg)](https://github.com/PyCQA/bandit)
 [![Linter](https://img.shields.io/badge/Linter-Ruff%20Hardened-black.svg)](https://github.com/astral-sh/ruff)
