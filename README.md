@@ -22,20 +22,20 @@ Archon-V acts as an immutable security membrane between incoming untrusted HTTP/
 
 ```mermaid
 flowchart LR
-    Client["Untrusted Client\n(Browser / Mobile / B2B)"] 
+    Client["Untrusted Client<br/>(Browser / Mobile / B2B)"] 
     
     subgraph ARCHON_CORE["Archon-V Interceptor Core"]
-        WAF["Rate Limiting & Threat Shield\n(Token Bucket O(1))"]
-        ABAC["ABAC Claims Validator\n(Immutable Claims Matrix)"]
-        KMS["KMS Envelope Encryption\n(Tenant-Dedicated Scopes)"]
-        Audit["SHA-256 Audit Trail Streamer\n(Immutable Journaling)"]
+        WAF["Rate Limiting & Threat Shield<br/>(Token Bucket O(1))"]
+        ABAC["ABAC Claims Validator<br/>(Immutable Claims Matrix)"]
+        KMS["KMS Envelope Encryption<br/>(Tenant-Dedicated Scopes)"]
+        Audit["SHA-256 Audit Trail Streamer<br/>(Immutable Journaling)"]
         
         WAF --> ABAC
         ABAC --> KMS
         KMS --> Audit
     end
     
-    Upstream["Core Banking / Upstream Services\n(Zero Network Exposure)"]
+    Upstream["Core Banking / Upstream Services<br/>(Zero Network Exposure)"]
 
     Client --> WAF
     Audit --> Upstream
