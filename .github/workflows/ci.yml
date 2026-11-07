@@ -36,3 +36,4 @@ jobs:
           PYTHONPATH: .
         run: |
           pytest tests/unit -v --durations=10
+

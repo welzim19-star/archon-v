@@ -34,6 +34,7 @@ id_*
 *.keystore
 secrets.*
 secrets/
+!core/interceptor/secrets.py
 
 # Binários pesados e artefatos de build
 *.apk
