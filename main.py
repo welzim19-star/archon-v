@@ -32,6 +32,7 @@ from fastapi.middleware.trustedhost import TrustedHostMiddleware
 from fastapi.responses import JSONResponse
 
 from api.middleware.auth import TenantAuthMiddleware
+from api.v1.demo.router import router as demo_router
 from api.v1.gate.router import router as gate_router
 from core.tenant.resolver import TenantResolver
 
@@ -146,6 +147,7 @@ async def global_exception_handler(request: Request, exc: Exception) -> JSONResp
 # ROUTERS
 # ---------------------------------------------------------------------------
 
+app.include_router(demo_router)
 app.include_router(gate_router)
 
 

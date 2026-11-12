@@ -1,0 +1,32 @@
+# =============================================================================
+# Archon-V — Render Free Tier Deployment Blueprint
+# File: render.yaml
+# =============================================================================
+# 1-Click deploy on Render. Free web service with sub-150MB RAM footprint.
+# Zero external database or cloud KMS requirements in Demo/Sandbox mode.
+# =============================================================================
+
+services:
+  - type: web
+    name: archon-v-playground
+    runtime: docker
+    plan: free
+    region: oregon # or ohio, frankfurt, singapore
+    dockerfilePath: ./Dockerfile
+    healthCheckPath: /health
+    autoDeploy: true
+    envVars:
+      - key: ENV
+        value: demo
+      - key: ALLOWED_HOSTS
+        value: "*"
+      - key: CORS_ORIGINS
+        value: "*"
+      - key: GCP_PROJECT_ID
+        value: archon-v-demo
+      - key: GCP_KMS_LOCATION
+        value: global
+      - key: DB_HOST
+        value: 127.0.0.1
+      - key: DB_PORT
+        value: "5432"

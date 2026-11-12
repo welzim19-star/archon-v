@@ -33,12 +33,22 @@ from starlette.middleware.base import BaseHTTPMiddleware
 
 logger = logging.getLogger("archon_v.auth_middleware")
 
-# Rotas que NÃO passam pela autenticação (ex: health check, webhook GCP)
+# Rotas que NÃO passam pela autenticação (ex: playground web, health check, demo sandbox)
 _EXEMPT_PATHS: frozenset[str] = frozenset({
+    "/",
+    "/favicon.ico",
     "/health",
     "/ready",
+    "/docs",
+    "/redoc",
+    "/openapi.json",
     "/webhooks/gcp-marketplace",
 })
+
+_EXEMPT_PREFIXES: tuple[str, ...] = (
+    "/api/v1/demo",
+    "/static",
+)
 
 
 def _make_error_response(correlation_id: str, error_code: str, status_code: int) -> JSONResponse:
@@ -92,8 +102,8 @@ class TenantAuthMiddleware(BaseHTTPMiddleware):
     """
 
     async def dispatch(self, request: Request, call_next: Callable) -> Response:
-        # --- Paths isentos de auth -------------------------------------------
-        if request.url.path in _EXEMPT_PATHS:
+        # --- Paths isentos de auth (Playground, Health, Docs, Demo Sandbox) --
+        if request.url.path in _EXEMPT_PATHS or any(request.url.path.startswith(p) for p in _EXEMPT_PREFIXES):
             return await call_next(request)
 
         # --- Correlation ID (gerado aqui se não vier no header) ---------------
