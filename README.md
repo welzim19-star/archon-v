@@ -13,9 +13,12 @@
 [![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/welzim19-star/archon-v)
 [![License](https://img.shields.io/badge/License-MIT-orange.svg)](LICENSE)
 
-> **Bank-Grade High-Availability Security Interceptor & Pre-Flight API Gateway.**  
-> Built for zero-trust critical infrastructure environments adhering to **Galvanic Isolation**, **Fail-Secure Defaults**, and **Attribute-Based Access Control (ABAC)** with KMS envelope encryption.  
-> Intercepts IDEs and autonomous AI agent execution streams to prevent secret bleeding and PII leakage *before* changes reach version control or production pipelines.
+> **Archon-V is a bank-grade DevSecOps security gateway.**  
+> It operates at the pre-commit stage to prevent cloud key leakage (AWS/GCP) and sensitive personal data bleeding (PII/GDPR) *before* code ever reaches the repository. It runs with sub-millisecond latency, Token Bucket overload protection, and multi-tenant cryptographic isolation via KMS.
+
+> [!TIP]
+> **In Plain English (The "Metal Detector" Analogy):**  
+> Think of Archon-V as the revolving door with a metal detector at a bank entrance, but for source code. When developers or autonomous AI agents generate code, it is easy to accidentally leave an AWS secret key or customer record in the commit diff. Archon-V inspects the payload in under 1 millisecond; if it detects exposed credentials or personal data, it locks the door immediately (*Fail-Secure*), stopping data leaks and compliance violations before they ever reach GitHub or production.
 
 ---
 

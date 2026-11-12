@@ -13,9 +13,12 @@
 [![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/welzim19-star/archon-v)
 [![Licença](https://img.shields.io/badge/Licen%C3%A7a-MIT-orange.svg)](LICENSE)
 
-> **Interceptor de Segurança e API Gateway de Alta Disponibilidade para Padrão Bancário.**  
-> Projetado para ambientes de infraestrutura crítica com Confiança Zero (*Zero Trust*), aderindo a **Isolamento Galvânico**, **Padrões Seguros de Falha (*Fail-Secure*)** e **Controle de Acesso Baseado em Atributos (ABAC)** com criptografia de envelope via KMS.  
-> Intercepta fluxos de IDEs e agentes autônomos de IA para evitar vazamento de credenciais e dados pessoais (PII) *antes* que as alterações atinjam o Git ou os ambientes de produção.
+> **O Archon-V é um gateway de segurança DevSecOps de padrão bancário.**  
+> Ele atua na fase de pré-commit para impedir vazamento de chaves de nuvem (AWS/GCP) e dados sensíveis (LGPD) antes mesmo do código chegar no repositório. Ele roda com latência sub-milissegundo, proteção de sobrecarga por Token Bucket e isolamento criptográfico multilocatário via KMS.
+
+> [!TIP]
+> **Em termos simples (A analogia da "Porta Giratória de Banco"):**  
+> Pense no Archon-V como a porta giratória com detector de metais de uma agência bancária, só que para código-fonte. Quando desenvolvedores ou agentes autônomos de IA geram código, é fácil esquecer sem querer uma chave da AWS ou dados de clientes (CPF, cartão) no meio do commit. O Archon-V inspeciona o código em menos de 1 milissegundo; se achar qualquer credencial ou dado pessoal, ele trava a porta na hora (*Fail-Secure*), impedindo vazamentos e multas da LGPD antes mesmo do código subir para o Git.
 
 ---
 
