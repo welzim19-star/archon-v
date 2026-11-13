@@ -6,6 +6,7 @@
 
 [![Linguagem](https://img.shields.io/badge/Linguagem-Python--3.12%2B-blue.svg)](https://www.python.org/)
 [![Framework](https://img.shields.io/badge/Framework-FastAPI%20%2F%20Uvicorn-009688.svg)](https://fastapi.tiangolo.com/)
+[![Live Playground](https://img.shields.io/badge/Live%20Demo-archon--v--playground.onrender.com-00C7B7?logo=render&logoColor=white)](https://archon-v-playground.onrender.com)
 [![Playground](https://img.shields.io/badge/Playground-Sandbox%20Interativo-06b6d4.svg)](#-playground-interativo-devsecops)
 [![CI](https://github.com/welzim19-star/archon-v/actions/workflows/ci.yml/badge.svg)](https://github.com/welzim19-star/archon-v/actions/workflows/ci.yml)
 [![Testes](https://img.shields.io/badge/Testes-Pytest%20%2B%20Cobertura-success.svg)](tests/)
@@ -25,6 +26,8 @@
 ## 🎮 Playground Interativo DevSecOps
 
 O Archon-V inclui um playground visual leve, acessível diretamente no navegador na rota `/`. Ele permite que engenheiros, auditores de segurança e avaliadores testem a interceptação de segurança em tempo real com latência sub-milissegundo.
+
+🔗 **Demonstração Interativa Online:** [https://archon-v-playground.onrender.com](https://archon-v-playground.onrender.com)
 
 ```text
  ┌────────────────────────────────────────────────────────────────────────┐
